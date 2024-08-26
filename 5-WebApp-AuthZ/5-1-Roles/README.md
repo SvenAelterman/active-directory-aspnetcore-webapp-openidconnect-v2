@@ -165,7 +165,7 @@ To manually register the apps, as a first step you'll need to:
     1. In the **Redirect URI** section enter the following redirect URIs:
         1. `https://localhost:44321/`
         1. `https://localhost:44321/signin-oidc`
-    1. In the **Front-channel logout URL** section, set it to `https://localhost:44321/signout-oidc`.
+    1. In the **Front-channel logout URL** section, set it to `https://localhost:44321/signout-callback-oidc`.
     1. Click **Save** to save your changes.
 1. In the app's registration screen, select the **Certificates & secrets** blade in the left to open the page where you can generate secrets and upload certificates.
 1. In the **Client secrets** section, select **New client secret**:
@@ -174,13 +174,13 @@ To manually register the apps, as a first step you'll need to:
     1. The generated key value will be displayed when you select the **Add** button. Copy and save the generated value for use in later steps.
     1. You'll need this key later in your code's configuration files. This key value will not be displayed again, and is not retrievable by any other means, so make sure to note it from the Microsoft Entra admin center before navigating to any other screen or blade.
     > :bulb: For enhanced security, instead of using client secrets, consider [using certificates](./README-use-certificate.md) and [Azure KeyVault](https://azure.microsoft.com/services/key-vault/#product-overview).
-    1. Since this app signs-in users, we will now proceed to select **delegated permissions**, which is is required by apps signing-in users.
+1. Since this app signs-in users, we will now proceed to select **delegated permissions**, which is is required by apps signing-in users.
     1. In the app's registration screen, select the **API permissions** blade in the left to open the page where we add access to the APIs that your application needs:
     1. Select the **Add a permission** button and then:
     1. Ensure that the **Microsoft APIs** tab is selected.
     1. In the *Commonly used Microsoft APIs* section, select **Microsoft Graph**
-      * Since this app signs-in users, we will now proceed to select **delegated permissions**, which is requested by apps that signs-in users.
-      * In the **Delegated permissions** section, select **User.Read**, **User.ReadBasic.All** in the list. Use the search box if necessary.
+        * Since this app signs-in users, we will now proceed to select **delegated permissions**, which is requested by apps that signs-in users.
+        * In the **Delegated permissions** section, select **User.Read**, **User.ReadBasic.All** in the list. Use the search box if necessary.
     1. Select the **Add permissions** button at the bottom.
 
 ##### Publish Application Roles for users and groups
@@ -421,7 +421,7 @@ This project has one WebApp project. To deploy it to Azure Web Sites, you'll nee
 
 ### Create and publish the `WebApp-RolesClaims` to an Azure Web Site
 
-1. Sign in to the [Microsoft Entra admin center](https://entra.microsoft.com).
+1. Sign in to the [Azure portal](https://portal.azure.com).
 1. Click `Create a resource` in the top left-hand corner, select **Web** --> **Web App**, and give your web site a name, for example, `WebApp-RolesClaims-contoso.azurewebsites.net`.
 1. Thereafter select the `Subscription`, `Resource Group`, `App service plan and Location`. `OS` will be **Windows** and `Publish` will be **Code**.
 1. Click `Create` and wait for the App Service to be created.
@@ -433,10 +433,10 @@ This project has one WebApp project. To deploy it to Azure Web Sites, you'll nee
 1. On the Settings tab, make sure `Enable Organizational Authentication` is NOT selected.  Click **Save**. Click on **Publish** on the main screen.
 1. Visual Studio will publish the project and automatically open a browser to the URL of the project.  If you see the default web page of the project, the publication was successful.
 
-### Update the Active Directory tenant application registration for `WebApp-RolesClaims`
+### Update the Entra ID tenant application registration for `WebApp-RolesClaims`
 
 1. Navigate back to to the [Microsoft Entra admin center](https://entra.microsoft.com).
-In the left-hand navigation pane, select the **Microsoft Entra ID** service, and then select **App registrations (Preview)**.
+   In the left-hand navigation pane, select the **Identity** service, and then select **App registrations**.
 1. In the resultant screen, select the `WebApp-RolesClaims` application.
 1. In the **Authentication** | page for your application, update the Logout URL fields with the address of your service, for example [https://WebApp-RolesClaims-contoso.azurewebsites.net](https://WebApp-RolesClaims-contoso.azurewebsites.net)
 1. From the *Branding* menu, update the **Home page URL**, to the address of your service, for example [https://WebApp-RolesClaims-contoso.azurewebsites.net](https://WebApp-RolesClaims-contoso.azurewebsites.net). Save the configuration.
@@ -461,8 +461,8 @@ This project has adopted the [Microsoft Open Source Code of Conduct](https://ope
 
 ## Learn More
 
-* [Microsoft identity platform (Microsoft Entra ID for developers)](https://docs.microsoft.com/azure/active-directory/develop/)
-* [Microsoft Entra ID code samples](https://docs.microsoft.com/azure/active-directory/develop/sample-v2-code)
+* [Microsoft identity platform (Microsoft Entra ID for developers)](https://learn.microsoft.com/entra/identity-platform/)
+* [Microsoft Entra ID code samples](https://learn.microsoft.com/entra/identity-platform/sample-v2-code?tabs=apptype)
 * [Overview of Microsoft Authentication Library (MSAL)](https://docs.microsoft.com/azure/active-directory/develop/msal-overview)
 * [Register an application with the Microsoft identity platform](https://docs.microsoft.com/azure/active-directory/develop/quickstart-register-app)
 * [Configure a client application to access web APIs](https://docs.microsoft.com/azure/active-directory/develop/quickstart-configure-app-access-web-apis)
