@@ -11,6 +11,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Security.Claims;
+using TodoListService.Infrastructure;
 using TodoListService.Models;
 
 namespace TodoListService.Controllers
@@ -172,6 +173,8 @@ namespace TodoListService.Controllers
 
         // DELETE: TodoList/Delete/5
         [HttpDelete("{id}")]
+        [Authorize(Policy = AuthorizationPolicies.AssignmentToDeleteRequired)]
+        //[Authorize(Roles ="ToDoList.Delete")]
         [RequiredScopeOrAppPermission(
             AcceptedScope = new string[] { _todoListReadWriteScope },
             AcceptedAppPermission = new string[] { _todoListReadWriteAllPermission })]
@@ -180,6 +183,7 @@ namespace TodoListService.Controllers
             if (!IsAppOnlyToken())
             {
                 // only delete if the ToDo list item belonged to this user
+                // "row-level security" or "entity-level security"
                 if (TodoStore.Values.Any(todo => todo.Id == id && todo.Owner == _currentPrincipalId))
                 {
                     TodoStore.Remove(id);

@@ -16,6 +16,7 @@ using System;
 using Microsoft.AspNetCore.Mvc.Filters;
 using TodoListService.Filters;
 using System.Threading.Tasks;
+using TodoListService.Infrastructure;
 
 namespace TodoListService
 {
@@ -40,6 +41,17 @@ namespace TodoListService
             // Adds Microsoft Identity platform (AAD v2.0) support to protect this Api
             services.AddMicrosoftIdentityWebApiAuthentication(Configuration);
 
+            // Notice the difference here between that of example 5.1: In example 5.1, we're examining the ID token, here the access token.
+            services.Configure<JwtBearerOptions>(JwtBearerDefaults.AuthenticationScheme, options =>
+            {
+                options.TokenValidationParameters.RoleClaimType = "roles";
+            });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy(AuthorizationPolicies.AssignmentToReadModifyRequired, policy => policy.RequireRole(AppRole.ReadModify));
+                options.AddPolicy(AuthorizationPolicies.AssignmentToDeleteRequired, policy => policy.RequireRole(AppRole.Delete));
+            });
 
             //// Comment the lines of code above and uncomment the following section if you would like to limit calls to this API to just a set of client apps
             //// The following is an example of extended token validation

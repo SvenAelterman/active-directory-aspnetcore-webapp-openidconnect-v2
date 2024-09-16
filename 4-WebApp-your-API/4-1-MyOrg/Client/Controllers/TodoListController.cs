@@ -6,6 +6,7 @@ using TodoListService.Models;
 using Microsoft.Identity.Abstractions;
 using System.Net.Http;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TodoListClient.Controllers
 {
@@ -95,8 +96,13 @@ namespace TodoListClient.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteItem(int id, [Bind("Id,Title,Owner")] Todo todo)
         {
-            await _downstreamApi.DeleteForUserAsync("TodoList", todo,
-                options  => options.RelativePath = $"api/todolist/{id}");
+            try
+            {
+                await _downstreamApi.DeleteForUserAsync("TodoList", todo,
+                    options => options.RelativePath = $"api/todolist/{id}");
+            }
+            // TODO: Customize error message
+            catch  { }
             return RedirectToAction("Index");
         }
     }
